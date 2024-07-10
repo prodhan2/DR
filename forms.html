@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Data</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    
+  
+      .header {
+        background-color: #007bff; /* Blue background */
+        color: #ffffff; /* White text color */
+        padding: 9px 0;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10; /* Ensure header appears above other content */
+      }
+  
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+  
+      .container {
+        flex: 1; /* Flex grow to fill remaining vertical space */
+        padding-bottom: 10px; /* Adjust padding to accommodate footer */
+        padding-top: 10px; /* Ensure content starts below the fixed header */
+      }
+  
+      .form-container {
+        margin-bottom: 20px;
+      }
+  
+      .footer {
+        text-align: center;
+        padding: 2px 0;
+        background-color: #0c79e5; /* Light gray background */
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+  
+      .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+      }
+  
+      .footer-content a {
+        margin-right: 10px; /* Add margin between elements */
+      }
+      
+
+      .header {
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 9px 0;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        display: inline-block;
+      }
+      
+      .home-button {
+        color: #ffffff;
+        text-decoration: none;
+        margin-right: 10px; /* Adjust spacing between Home button and title */
+      }
+      
+      .home-button:hover {
+        text-decoration: underline; /* Add underline on hover for better usability */
+      }
+      
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="container">
+      <a href="index.html" class="btn btn-link home-button">Home</a>
+      <h1>Dinajpur.RU Students Data</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="form-container">
+     
+      <form id="submitDataForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="department">Department</label>
+            <input type="text" class="form-control" id="department" name="department" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="session">Session</label>
+            <input type="text" class="form-control" id="session" name="session" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="hall">Hall</label>
+            <input type="text" class="form-control" id="hall" name="hall" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="school">School</label>
+            <input type="text" class="form-control" id="school" name="school" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="college">College</label>
+            <input type="text" class="form-control" id="college" name="college" required>
+          </div>
+          
+        </div>
+        <div class="form-row">
+          
+          <div class="form-group col-md-6">
+            <label for="image">Image</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="image" name="image" required>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#imageLinkModal">Get Image Link</button>
+              </div>
+            </div>
+            <small id="imageHelpBlock" class="form-text text-muted">
+              Click "Get Image Link" to obtain the image link from <a href="https://postimages.org/" target="_blank">Postimages.org</a>.
+            </small>
+          </div>
+
+          
+          <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="upazila">Upazila</label>
+            <select class="form-control" id="upazila" name="upazila" required>
+              <option value="">Select an Upazila</option>
+              <option value="Dinajpur Sadar Upazila">Dinajpur Sadar Upazila</option>
+              <option value="Birampur Upazila">Birampur Upazila</option>
+              <option value="Biral Upazila">Biral Upazila</option>
+              <option value="Phulbari Upazila">Phulbari Upazila</option>
+              <option value="Hakimpur Upazila">Hakimpur Upazila</option>
+              <option value="Khansama Upazila">Khansama Upazila</option>
+              <option value="Nawabganj Upazila">Nawabganj Upazila</option>
+              <option value="Parbatipur Upazila">Parbatipur Upazila</option>
+              <option value="Birganj Upazila">Birganj Upazila</option>
+              <option value="Kaharole Upazila">Kaharole Upazila</option>
+              <option value="Chirirbandar Upazila">Chirirbandar Upazila</option>
+              <option value="Ghoraghat Upazila">Ghoraghat Upazila</option>
+              <option value="Bochaganj Upazila">Bochaganj Upazila</option>
+            </select>
+          </div> 
+
+
+          <div class="form-group col-md-6">
+            <label for="phone">Phone</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="blood">Blood Group</label>
+            <select class="form-control" id="blood" name="blood" required>
+              <option value="">Select Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+
+
+        </div>
+        <button type="submit" class="btn btn-success btn-block">Submit</button>
+      </form>
+    </div>
+  </div>
+
+
+<!-- Welcome Modal -->
+<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="welcomeModalLabel">আপনাকে স্বাগতম দিনাজপুর জেলার অন্তর্গত রাজশাহী বিশ্ববিদ্যালয় শিক্ষার্থীদের ডাটাবেজে।</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+         <ol>
+        <li>অবশ্যই সবকিছু ইংরেজিতে লিখতে হবে EX. sujan prodhan</li>
+            <li>ডিপার্টমেন্টের সংক্ষিপ্ত নাম লিখতে হবে Ex. CSE</li>
+            <li>অপ্রাসঙ্গিক তথ্য দেওয়া যাবে না অবশ্যই তথ্যগুলো পরিপূর্ণ সঠিক হতে হবে।</li>
+          </ol>
+          <p>ছবির লিংক তৈরি করার জন্য "Get Image Link" বাটনে ক্লিক করা যেতে পারে।</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+  <!-- Image Link Modal -->
+  <div class="modal fade" id="imageLinkModal" tabindex="-1" role="dialog" aria-labelledby="imageLinkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageLinkModalLabel">Get Image Link</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Visit <a href="https://postimages.org/" target="_blank">Postimages.org</a> and upload your image. Copy the direct link provided and paste it into the Image field above.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submitting Modal -->
+  <div class="modal" id="submittingModal" tabindex="-1" role="dialog" aria-labelledby="submittingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <p class="mt-2">Submitting...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Success!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Data submitted successfully.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <a href="https://prodhan2.github.io" class="btn btn-link">Home</a>
+      <p class="ml-2 mb-0">Powered by Dinajpur.RU </p>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // JavaScript to show welcome modal on page load
+    $(document).ready(function() {
+      $('#welcomeModal').modal('show');
+    });
+  </script>
+
+  <script>
+    const form = document.getElementById('submitDataForm');
+    const submittingModal = new bootstrap.Modal(document.getElementById('submittingModal'));
+    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const values = Object.fromEntries(data.entries());
+
+      // Show submitting modal
+      submittingModal.show();
+
+      fetch('https://script.google.com/macros/s/AKfycbzI93-TN236fS9pvZKh1yrMAbg7dXtuVLPgIu4KsC340QWAWX5H3HJ-Wmpc_B_R6VjueA/exec', {
+        method: 'POST',
+        body: JSON.stringify(values),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Hide submitting modal
+        submittingModal.hide();
+        // Show success modal
+        successModal.show();
+        form.reset();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+</body>
+</html>

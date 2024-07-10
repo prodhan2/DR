@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Information System</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-text {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .profile-pic,
+    .profile-pic-modal {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid transparent; /* Initial transparent border */
+      animation: borderAnimation 2s infinite; /* Animation properties */
+    }
+    .profile-pic-modal {
+      width: 120px;
+      height: 120px;
+    }
+    @keyframes borderAnimation {
+      0% {
+        border-color: red;
+      }
+      50% {
+        border-color: green;
+      }
+      100% {
+        border-color: red;
+      }
+    }
+    /* Sidebar Styles */
+
+    .custom-search-form {
+      margin-bottom: 20px;
+    }
+    .custom-search-form input[type="text"] {
+      width: calc(100% - 220px); /* Adjust as needed */
+      padding: 0.375rem 0.75rem; /* Adjust padding */
+      font-size: 0.875rem; /* Adjust font size */
+    }
+    .custom-search-form .btn {
+      padding: 0.375rem 0.75rem; /* Adjust padding */
+      font-size: 0.875rem; /* Adjust font size */
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="my-4">
+      
+    </header>
+
+    <!-- Search Box -->
+    <div class="row">
+      <div class="col-md-6 offset-md-3 mb-4 custom-search-form">
+        <form class="form-inline">
+          <input type="text" id="searchInput" class="form-control mr-sm-2" placeholder="Search by name, department">
+          <button type="button" class="btn btn-primary my-2 my-sm-0 mr-2" onclick="searchStudents()">Search</button>
+          <button type="button" class="btn btn-secondary my-2 my-sm-0" onclick="refreshStudents()">Refresh</button>
+        </form>
+      </div>
+    </div>
+    <!-- Result Count -->
+    <div id="result-count"></div>
+
+    <!-- Student List (Dynamically Populated) -->
+    <div class="row" id="studentList">
+      <!-- Student cards will be dynamically populated here -->
+    </div>
+  </div>
+
+  <!-- Student Details Modal -->
+  <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="studentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="studentModalLabel">Student Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <img id="modalProfilePic" src="https://via.placeholder.com/150" class="profile-pic" alt="Profile Picture">
+          </div>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td id="modalName"></td>
+              </tr>
+              <tr>
+                <th>Blood Type</th>
+                <td id="modalBlood"></td>
+              </tr>
+              <tr>
+                <th>Upazila</th>
+                <td id="modalUpazila"></td>
+              </tr>
+              <tr>
+                <th>College</th>
+                <td id="modalCollege"></td>
+              </tr>
+              <tr>
+                <th>School</th>
+                <td id="modalSchool"></td>
+              </tr>
+              <tr>
+                <th>Department</th>
+                <td id="modalDepartment"></td>
+              </tr>
+              <tr>
+                <th>Email</th>
+                <td id="modalEmail"></td>
+              </tr>
+              <tr>
+                <th>Hall</th>
+                <td id="modalHall"></td>
+              </tr>
+              <tr>
+                <th>Session</th>
+                <td id="modalSession"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-md-6">
+              <a id="modalCallBtn" href="#" class="btn btn-success btn-block">Call Me</a>
+            </div>
+            <div class="col-md-6">
+              <button id="modalDownloadBtn" class="btn btn-primary btn-block">Download Info</button>
+            </div>
+          </div>
+          <div class="mt-3 text-center">
+            <a id="modalFacebookBtn" href="#" class="btn btn-info" target="_blank">Facebook Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Powered by Sujan Prodhan
+  </div>
+
+  <script src="data.js"></script>
+  <script src="dataview.js"></script>
+
+  <!-- Sidebar Toggle Script -->
+  <script>
+    $(document).ready(function() {
+      showStudentInfo(); // Populate student list on page load
+
+      $('#sidebarToggle').on('click', function() {
+        $('.sidebar').toggleClass('show');
+      });
+    });
+
+    function refreshStudents() {
+      // Implement your refresh logic here
+      // For example, reload the student list
+      showStudentInfo();
+    }
+  </script>
+</body>
+</html>

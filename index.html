@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connection Status</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color:white;
+      color: #040101;
+    }
+    .card {
+      margin: 20px auto;
+      max-width: 400px;
+      animation: fadeIn 1s;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      min-width: 200px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #333;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Neon Animation */
+    @keyframes neon {
+      0% {
+        text-shadow: 0 0 10px #f00, 0 0 20px #f00, 0 0 30px #f00, 0 0 40px #0f0, 0 0 70px #0f0, 0 0 80px #0f0, 0 0 100px #0f0, 0 0 150px #0f0;
+      }
+      30% {
+        text-shadow: none;
+      }
+      100% {
+        text-shadow: 0 0 5px #f00, 0 0 10px #f00, 0 0 15px #f00, 0 0 20px #0f0, 0 0 35px #0f0, 0 0 40px #0f0, 0 0 50px #0f0, 0 0 75px #0f0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="status" class="card border-danger mb-3" style="display: none;">
+    <div class="card-body">
+      <h5 class="card-title">Your net connection is off.</h5>
+      <p class="card-text">Please turn on your net connection or Wi-Fi connection. If you have any problems, call our helpline number or send a message on Facebook.</p>
+      <a href="tel:1234567890" class="btn btn-primary" id="callButton">Call Now</a>
+      <a href="https://facebook.com/messages" class="btn btn-secondary" id="messageButton">Send a Message</a>
+    </div>
+  </div>
+
+  <div id="onlineToast" class="toast" data-delay="5000">
+    <div class="toast-header">
+      <strong class="mr-auto text-success">Online</strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+    </div>
+    <div class="toast-body">
+      You are back online!
+    </div>
+  </div>
+
+  <div id="welcomeMessage" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <img src="https://cliply.co/wp-content/uploads/2020/09/442008571_ARTIST_AVATAR_3D_400px.gif" class="img-fluid mb-3" alt="Auto-responsive image">
+    <h1 style="animation: neon 1.5s ease-in-out infinite alternate, fadeIn 1s;">Dinapur.RU</h1>
+    <div id="loadingText">Loading database <span class="loading"></span></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const statusElement = document.getElementById('status');
+      const onlineToast = document.getElementById('onlineToast');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      let initialCheckDone = false;
+
+      function updateOnlineStatus() {
+        if (navigator.onLine) {
+          if (initialCheckDone) {
+            $(onlineToast).toast('show');
+          }
+          statusElement.style.display = 'none';
+          welcomeMessage.style.display = 'block'; // Show welcome message
+        } else {
+          statusElement.style.display = 'block';
+          welcomeMessage.style.display = 'none'; // Hide welcome message
+        }
+        initialCheckDone = true;
+      }
+
+      // Initial check
+      updateOnlineStatus();
+
+      // Listen for changes in connection status
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+
+      // Redirect after 5 seconds
+      setTimeout(() => {
+        window.location.href = 'first_page.html';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

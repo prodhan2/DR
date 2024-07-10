@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        
+        .header {
+            background-color: #343a40; /* Dark background for header */
+            color: #ffffff; /* White text color */
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .chart-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three columns */
+            gap: 20px; /* Gap between grid items */
+            margin: 20px auto;
+            background-color: #ffffff; /* White background for chart section */
+            border: 1px solid #dee2e6; /* Light border */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+        }
+        
+        .chart-container {
+            background-color: #ffffff; /* White background for each chart container */
+            border: 1px solid #dee2e6; /* Light border */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+        }
+        
+        .chart-container h2 {
+            margin-top: 0;
+        }
+        
+        .footer {
+            text-align: center;
+            background-color: #343a40; /* Dark background for footer */
+            color: #ffffff; /* White text color */
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Inverted shadow at bottom */
+        }
+        
+        .share-button {
+            cursor: pointer;
+            background-color: #007bff; /* Blue share button */
+            color: #ffffff; /* White text color */
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .share-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Full-width canvas */
+        canvas {
+            width: 100% !important;
+            height: auto !important; /* Maintain aspect ratio */
+        }
+
+        @media (max-width: 768px) {
+            .chart-section {
+                grid-template-columns: 1fr; /* On smaller screens, display charts in a single column */
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="chart-section">
+        <!-- Chart 1: Number of Students per Session -->
+        <div class="chart-container">
+            <h2>Number of Students per Session</h2>
+            <canvas id="sessionChart"></canvas>
+            <button id="shareSessionChart" class="share-button">Share Session Chart</button>
+        </div>
+
+        <!-- Chart 2: Student Blood Type Distribution -->
+        <div class="chart-container">
+            <h2>Student Blood Type Distribution</h2>
+            <canvas id="bloodTypeChart"></canvas>
+            <button id="shareBloodTypeChart" class="share-button">Share Blood Type Chart</button>
+        </div>
+        
+        <!-- Chart 3: Student Department Distribution -->
+        <div class="chart-container">
+            <h2>Student Department Distribution</h2>
+            <canvas id="departmentChart"></canvas>
+            <button id="shareDepartmentChart" class="share-button">Share Department Chart</button>
+        </div>
+
+        <!-- Chart 4: Student Upazila Distribution -->
+        <div class="chart-container">
+            <h2>Student Upazila Distribution</h2>
+            <canvas id="upazilaChart"></canvas>
+            <button id="shareUpazilaChart" class="share-button">Share Upazila Chart</button>
+        </div>
+
+    <footer class="footer">
+        <p style="margin: 0;">Powered by Sujan Prodhan</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="data.js"></script>
+
+    <script>
+        // Count students per session
+        const sessions = {};
+        studentData.forEach(student => {
+            if (sessions[student.session]) {
+                sessions[student.session]++;
+            } else {
+                sessions[student.session] = 1;
+            }
+        });
+
+        const sessionLabels = Object.keys(sessions);
+        const sessionData = Object.values(sessions);
+
+        // Count blood types
+        const bloodTypes = {
+            'A+': 0,
+            'A-': 0,
+            'B+': 0,
+            'B-': 0,
+            'AB+': 0,
+            'AB-': 0,
+            'O+': 0,
+            'O-': 0
+        };
+
+        studentData.forEach(student => {
+            bloodTypes[student.blood]++;
+        });
+
+        const bloodLabels = Object.keys(bloodTypes);
+        const bloodData = Object.values(bloodTypes);
+
+        // Count departments
+        const departments = {};
+        studentData.forEach(student => {
+            if (departments[student.department]) {
+                departments[student.department]++;
+            } else {
+                departments[student.department] = 1;
+            }
+        });
+
+        const departmentLabels = Object.keys(departments);
+        const departmentData = Object.values(departments);
+
+        // Count upazilas
+        const upazilas = {};
+        studentData.forEach(student => {
+            if (upazilas[student.upazila]) {
+                upazilas[student.upazila]++;
+            } else {
+                upazilas[student.upazila] = 1;
+            }
+        });
+
+        const upazilaLabels = Object.keys(upazilas);
+        const upazilaData = Object.values(upazilas);
+
+        // Chart.js initialization
+        const sessionCtx = document.getElementById('sessionChart').getContext('2d');
+        const sessionChart = new Chart(sessionCtx, {
+            type: 'bar',
+            data: {
+                labels: sessionLabels,
+                datasets: [{
+                    label: 'Number of Students',
+                    data: sessionData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+
+        const bloodTypeCtx = document.getElementById('bloodTypeChart').getContext('2d');
+        const bloodTypeChart = new Chart(bloodTypeCtx, {
+            type: 'pie',
+            data: {
+                labels: bloodLabels,
+                datasets: [{
+                    label: 'Blood Type Distribution',
+                    data: bloodData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(0, 255, 255, 0.6)',
+                        'rgba(255, 0, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(0, 255, 255, 1)',
+                        'rgba(255, 0, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+
+        const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+        const departmentChart = new Chart(departmentCtx, {
+            type: 'bar',
+            data: {
+                labels: departmentLabels,
+                datasets: [{
+                    label: 'Number of Students',
+                    data: departmentData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+
+        const upazilaCtx = document.getElementById('upazilaChart').getContext('2d');
+        const upazilaChart = new Chart(upazilaCtx, {
+            type: 'bar',
+            data: {
+                labels: upazilaLabels,
+                datasets: [{
+                    label: 'Number of Students',
+                    data: upazilaData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
+
+        // Share chart functionality with watermark
+        function shareChart(chartId) {
+            const chartElement = document.getElementById(chartId);
+            html2canvas(chartElement, {
+                backgroundColor: '#ffffff', // Ensure white background
+                onrendered: function (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                    ctx.font = '14px Arial';
+                    ctx.fillText('Powered by Sujan Prodhan', 10, canvas.height - 30);
+                    ctx.fillText('University of Rajshahi', 10, canvas.height - 10);
+
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0); // Save as JPEG with high quality
+                    const link = document.createElement('a');
+                    link.href = imgData;
+                    link.download = `${chartId}.jpg`;
+                    link.click();
+                }
+            });
+        }
+
+        document.getElementById('shareSessionChart').addEventListener('click', () => {
+            shareChart('sessionChart');
+        });
+
+        document.getElementById('shareBloodTypeChart').addEventListener('click', () => {
+            shareChart('bloodTypeChart');
+        });
+
+        document.getElementById('shareDepartmentChart').addEventListener('click', () => {
+            shareChart('departmentChart');
+        });
+
+        document.getElementById('shareUpazilaChart').addEventListener('click', () => {
+            shareChart('upazilaChart');
+        });
+    </script>
+</body>
+</html>

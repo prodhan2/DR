@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Header with Drawer Menu and Notification Popup</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Define standard colors */
+    :root {
+      --primary-color: #007bff; /* Blue */
+      --secondary-color: #6c757d; /* Gray */
+      --accent-color: #dc3545; /* Red */
+      --background-light: #f8f9fa; /* Light background */
+      --background-dark: #343a40; /* Dark background */
+    }
+    
+    .nav-link.active, .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+    .header {
+      background-color: var(--background-light);
+      border-bottom: 1px solid #dee2e6;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    .header-logo {
+      margin: 0;
+      color: var(--primary-color);
+      text-align: center; /* Center align logo */
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+    }
+    .nav .nav-link {
+      padding: 5px 15px;
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
+    .nav .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+    .notification-icon {
+      display: inline-block;
+      position: relative;
+      margin-left: auto;
+      margin-right: 20px; /* Adjust margin as needed */
+      cursor: pointer; /* Add cursor pointer for interaction */
+    }
+    .notification-icon .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      padding: 5px 10px;
+      border-radius: 50%;
+      background-color: var(--accent-color);
+      color: white;
+    }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: var(--background-light);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1050;
+      overflow-y: auto; /* Enable scroll for overflow content */
+    }
+    .drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: var(--background-dark);
+      color: white;
+    }
+    .drawer-body {
+      padding: 20px;
+      flex: 1 0 auto;
+      animation: fadeIn 0.5s ease-in-out; /* Fade-in animation for drawer items */
+    }
+    .drawer-body a {
+      display: block;
+      padding: 10px 15px;
+      color: var(--background-dark);
+      text-decoration: none;
+      transition: background-color 0.3s ease-in-out;
+    }
+    .drawer-body a:hover, .drawer-body a.active {
+      background-color: var(--secondary-color);
+      color: var(--primary-color) !important;
+    }
+    .drawer-footer {
+      flex-shrink: 0;
+      padding: 10px;
+      background-color: var(--background-light);
+      text-align: center;
+      border-top: 1px solid #dee2e6;
+    }
+    .notification-popup {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background-color: var(--background-light);
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1060;
+      overflow-y: auto; /* Enable scroll for overflow content */
+      padding: 20px;
+    }
+    .notification-popup.open {
+      transform: translateX(0);
+    }
+    .notification-popup .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+    }
+    .notification-card {
+      margin-bottom: 15px;
+      border: 1px solid #dee2e6;
+      border-left: 5px solid var(--primary-color); /* Left border color */
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .notification-card .card-body {
+      padding: 15px;
+    }
+    .notification-card .card-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--primary-color); /* Title color */
+    }
+    .notification-card .card-text {
+      font-size: 14px;
+      color: #6c757d; /* Description color */
+    }
+
+    @media (max-width: 576px) {
+      .nav {
+        display: none;
+      }
+      .header-logo {
+        text-align: center;
+      }
+      .notification-icon {
+        margin-right: 10px; /* Adjust margin as needed */
+      }
+    }
+
+    /* Shake animation */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container-fluid header-content">
+    <button class="btn btn-outline-secondary d-lg-none" id="menuToggle"><i class="fas fa-bars"></i></button>
+    <h5 class="header-logo m-0">My Logo</h5>
+    <nav class="nav">
+      <a href="#" class="nav-link"><i class="fas fa-home"></i> Home</a>
+      <a href="student_info.html"><i class="fas fa-user-graduate"></i> Students Information</a>
+      <a href="forms.html"><i class="fas fa-file-alt"></i> Submit Data</a>
+      <a href="teacher_info.html"><i class="fas fa-chalkboard-teacher"></i> Teachers Information</a>
+      <a href="graph.html"><i class="fas fa-chart-bar"></i> 3D Statistics</a>
+      <a href="cv.html"><i class="fas fa-file-pdf"></i> CV Generator</a>
+      <a href="image_gallery.html"><i class="far fa-images"></i> Image Gallery</a>
+      <a href="#" class="nav-link"><i class="fas fa-user-circle"></i> Profile</a>
+      
+    </nav>
+    <div class="notification-icon" id="notificationIcon">
+      <i class="fas fa-bell"></i>
+      <span class="badge">4</span> <!-- Initial badge content -->
+    </div>
+  </div>
+</header>
+
+<div class="drawer d-flex flex-column" id="drawerMenu">
+  <div class="drawer-header">
+    <h5>Menu</h5>
+    <button class="btn btn-outline-light" id="closeDrawer"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-body">
+    <a href="#" class="nav-link"><i class="fas fa-home"></i> home_page</a>
+    <a href="student_info.html"><i class="fas fa-user-graduate"></i> Students Information</a>
+    <a href="forms.html"><i class="fas fa-file-alt"></i> Submit Data</a>
+    <a href="teacher_info.html"><i class="fas fa-chalkboard-teacher"></i> Teachers Information</a>
+    <a href="graph.html"><i class="fas fa-chart-bar"></i> 3D Statistics</a>
+    <a href="cv.html"><i class="fas fa-file-pdf"></i> CV Generator</a>
+    <a href="image_gallery.html"><i class="far fa-images"></i> Image Gallery</a>
+    
+  </div>
+  <div class="drawer-footer">
+    <p>Powered by Sujan Prodhan</p>
+  </div>
+</div>
+
+<div class="notification-popup" id="notificationPopup">
+  <div class="close-popup" id="closePopup"><i class="fas fa-times"></i></div>
+  <h5>Notifications</h5>
+  <div class="notification-list">
+    <!-- Notification cards will be dynamically added here -->
+  </div>
+</div>
+
+<div class="container mt-4" id="pageContent">
+  <!-- Page content will be loaded dynamically here -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Toggle drawer menu
+  document.getElementById('menuToggle').addEventListener('click', function() {
+    document.getElementById('drawerMenu').classList.toggle('open');
+  });
+
+  // Close drawer menu
+  document.getElementById('closeDrawer').addEventListener('click', function() {
+    document.getElementById('drawerMenu').classList.remove('open');
+  });
+
+  // Toggle notification popup
+  document.getElementById('notificationIcon').addEventListener('click', function() {
+    document.getElementById('notificationPopup').classList.toggle('open');
+    document.getElementById('notificationIcon').classList.remove('shake'); // Remove shake animation on click
+  });
+
+  // Close notification popup
+  document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('notificationPopup').classList.remove('open');
+  });
+
+  // Function to load content from external file
+  function loadPageContent(pageName) {
+    const pageContent = document.getElementById('pageContent');
+    
+    // Clear existing content
+    pageContent.innerHTML = `<h3>Loading ${pageName}...</h3>`;
+    
+    // Define file to load based on button clicked
+    let fileToLoad;
+    switch (pageName) {
+      case 'home_page.html':
+        fileToLoad = 'home_page.html';
+        break;
+      case 'Contact':
+        fileToLoad = 'contact.html';
+        break;
+      case 'Services':
+        fileToLoad = 'services.html';
+        break;
+      case 'FAQ':
+        fileToLoad = 'faq.html';
+        break;
+      case 'Image-glarry':
+        fileToLoad = 'glarry.html';
+        break;
+
+      default:
+        fileToLoad = 'home_page.html';
+    }
+  
+    // Load content from file using fetch API
+    fetch(fileToLoad)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        pageContent.innerHTML = data; // Replace content in pageContent container
+      })
+      .catch(error => {
+        console.error('Error fetching content:', error);
+        pageContent.innerHTML = `<h3>Error loading ${pageName}</h3>`;
+      });
+  }
+
+  // Function to show fake notifications as cards
+  function showFakeNotifications() {
+    // Simulate notification items
+    const notifications = [
+      { title: 'New Message', description: 'You have received a new message.' },
+      { title: 'Reminder', description: 'Don\'t forget your appointment today.' },
+      { title: 'Event Alert', description: 'Upcoming event tomorrow.' },
+      { title: 'Feedback Received', description: 'New feedback submitted.' }
+    ];
+  
+    const notificationList = document.querySelector('.notification-list');
+    notificationList.innerHTML = ''; // Clear previous notifications
+  
+    notifications.forEach(notification => {
+      const card = document.createElement('div');
+      card.classList.add('notification-card', 'card');
+      card.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">${notification.title}</h5>
+          <p class="card-text">${notification.description}</p>
+        </div>
+      `;
+      
+      notificationList.appendChild(card);
+    });
+  }
+
+  // Add event listeners for navigation links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default anchor behavior
+      
+      // Get page name from link text (remove icon)
+      const pageName = this.innerText.trim().replace(/(\s+\w+\s+)(.+)/, '$2');
+      
+      // Load content based on page name
+      loadPageContent(pageName);
+      
+      // Close drawer menu (if open)
+      document.getElementById('drawerMenu').classList.remove('open');
+    });
+  });
+
+  // Initial load of content (Home page)
+  document.addEventListener('DOMContentLoaded', function() {
+    loadPageContent('Home');
+  });
+
+  // Initial load of fake notifications
+  showFakeNotifications();
+</script>
+
+</body>
+</html>

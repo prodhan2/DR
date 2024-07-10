@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাপসটির কার্যক্রম চলমান অবস্থায় আছে</title>
+    <style>
+        /* Typing animation styles */
+        .typing-animation {
+            overflow: hidden; /* Ensure text doesn't overflow */
+            white-space: nowrap; /* Prevent wrapping */
+            border-right: .15em solid orange; /* Typing cursor */
+            animation: typing 4s steps(20, end) infinite, blink-caret 0.5s step-end infinite; /* Animation definitions */
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange }
+        }
+        /* Menu item styles */
+        .menu-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa; /* Light background */
+            cursor: pointer;
+            border-left: 4px solid transparent; /* Transparent border initially */
+            transition: border-left-color 0.3s ease-in-out; /* Smooth transition */
+        }
+        .menu-item:hover {
+            background-color: #e9ecef; /* Lighter background on hover */
+            border-left-color: orange; /* Highlight border on hover */
+        }
+        .menu-item h2 {
+            font-weight: bold;
+            color: #343a40; /* Dark text color */
+            font-size: 18px; /* Adjust font size as needed */
+        }
+        .menu-item a {
+            color: #007bff; /* Bootstrap's primary link color */
+            text-decoration: none;
+        }
+        .menu-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="typing-animation">অ্যাপসটির কার্যক্রম চলমান অবস্থায় আছে</h1>
+                <p class="mb-4">আপাহত ফিচারগুলো দেখার জন্য মেনু আইকনে Menu বাটনে ক্লিক করুন</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul>
+                    <li class="menu-item" onclick="navigateTo('students')">
+                        <h2>১. স্টুডেন্ট ইনফরমেশন দেখার জন্য menu থেকে Students info তে ক্লিক করুন</h2>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('teachers')">
+                        <h2>২. টিচার ইনফরমেশন দেখার জন্য menu থেকে Teachers info তে ক্লিক করুন</h2>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('cv-generator')">
+                        <h2>৩. সিভি তৈরি করার জন্য menu থেকে Cv generator তে ক্লিক করুন</h2>
+                    </li>
+                    <li class="menu-item">
+                        <h2>৪. আমাদের সম্পর্কে জানতে <a href="https://prodhan2.github.io">এখানে ক্লিক করুন</a></h2>
+                    </li>
+                    <li class="menu-item" onclick="navigateTo('3d-statistics')">
+                        <h2>৫. থ্রিডি স্ট্যাটিস্টিক দেখেতে menu থেকে 3d statistics তে ক্লিক করুন</h2>
+                    </li>
+                    <li class="menu-item">
+                        <h2>৬. আপনি দিনাজপুর জেলার হয়ে থাকলে আপনার তথ্যগুলো <a href="forms.html">এখানে দিন</a></h2>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: Define navigateTo function -->
+    <script>
+        function navigateTo(page) {
+            // Define navigation behavior here
+            console.log('Navigating to ' + page);
+        }
+    </script>
+</body>
+</html>
